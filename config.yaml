@@ -1,0 +1,48 @@
+# Configuration file for DinoV3 fine-tuning on TNG50-SKIRT
+
+# Model Configuration
+model:
+  name: "facebook/dinov3-vit7b16-pretrain-lvd1689m"  # Your downloaded model
+  use_lora: true
+  lora_r: 8  # LoRA rank (higher = more parameters, better capacity)
+  lora_alpha: 16  # LoRA scaling parameter
+  lora_dropout: 0.1
+  freeze_backbone: true  # Keep pretrained weights frozen
+  num_classes: 10  # Update based on your classification task
+
+# Data Configuration
+data:
+  data_dir: "./data/tng50_skirt"
+  labels_file: "./data/labels.json"  # Create this with your labels
+  image_size: 224
+  train_split: 0.8
+  val_split: 0.2
+
+# Training Configuration
+training:
+  output_dir: "./models/dinov3_tng50"
+  batch_size: 4  # Reduce if OOM (7B model is large!)
+  learning_rate: 5e-4
+  num_epochs: 10
+  warmup_ratio: 0.05
+  weight_decay: 1e-4
+  seed: 42
+
+# Evaluation & Logging
+evaluation:
+  eval_steps: 100
+  save_steps: 500
+  logging_steps: 10
+
+# Optional: Weights & Biases logging
+wandb:
+  enabled: false
+  project: "dinov3-tng50"
+  entity: null  # Your W&B username
+
+# Example classification tasks for TNG50-SKIRT:
+# 1. Galaxy morphology: elliptical, spiral, irregular, etc.
+# 2. Star formation activity: quiescent, star-forming
+# 3. Mass bins: low, medium, high mass
+# 4. Bar detection: barred, unbarred
+# 5. Environment: field, group, cluster
